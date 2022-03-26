@@ -2,6 +2,19 @@
 k3s_version: v1.22.3+k3s1
 ansible_user: debian
 systemd_dir: /etc/systemd/system
-master_ip: "{{ hostvars[groups['master'][0]]['ansible_host'] | default(groups['master'][0]) }}"
-extra_server_args: ""
+# interface which will be used for flannel
+flannel_iface: "eth1"
+
+# apiserver_endpoint is virtual ip-address which will be configured on each master
+apiserver_endpoint: "192.168.1.100"
+# k3s_token is required  masters can talk together securely
+k3s_token: "mysupersecuretoken"
+
+extra_server_args: "--no-deploy servicelb --no-deploy traefik"
 extra_agent_args: ""
+
+# If Vagrant is used
+# ansible_user: vagrant
+# flannel_iface: "eth1"
+# extra_server_args: "--node-ip={{ ansible_eth1.ipv4.address }} --flannel-iface={{ flannel_iface }} --no-deploy servicelb --no-deploy traefik"
+# extra_agent_args: "--flannel-iface={{ flannel_iface }}"
